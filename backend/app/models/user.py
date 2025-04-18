@@ -1,6 +1,7 @@
 from sqlalchemy import Boolean, Column, Integer, String
 from sqlalchemy.sql.sqltypes import DateTime
 from sqlalchemy.sql import func
+from sqlalchemy.orm import relationship
 from ..db.base import Base
 
 class User(Base):
@@ -13,4 +14,8 @@ class User(Base):
     is_active = Column(Boolean, default=True)
     is_superuser = Column(Boolean, default=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
-    updated_at = Column(DateTime(timezone=True), onupdate=func.now()) 
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+
+    # Relationships
+    email_templates = relationship("EmailTemplate", back_populates="owner")
+    generated_emails = relationship("GeneratedEmail", back_populates="owner") 
