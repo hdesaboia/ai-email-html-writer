@@ -1,7 +1,7 @@
 # Product Requirements Document (PRD)
 
 ## Overview
-This document outlines the requirements, specifications, and implementation plan for the AI Email HTML Writer project.
+This document outlines the requirements, specifications, and implementation plan for the AI Email HTML Writer project. The goal is to replace the manual process of converting Figma-based email designs into responsive HTML emails by leveraging AI, reducing production time, eliminating manual errors, and enabling scalability in email creation while adhering to brand and technical standards.
 
 ## Table of Contents
 1. [Requirements](requirements.md)
@@ -10,11 +10,12 @@ This document outlines the requirements, specifications, and implementation plan
 4. [Project Milestones](milestones.md)
 
 ## Document Status
-- **Version**: 1.0
-- **Last Updated**: [Date]
+- **Version**: 1.1
+- **Last Updated**: 04/18/2025
 - **Status**: Draft
+- **Author**: Henrique Saboia
 
 ## Change Log
 | Version | Date | Changes | Author |
 |---------|------|---------|--------|
-| 1.0 | [Date] | Initial draft | [Author] | 
+| 1.1 | 04/18/2025 | Initial draft with complete requirements | Henrique Saboia | 
