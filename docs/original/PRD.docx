@@ -1,0 +1,222 @@
+## **Product Requirements Document**
+
+**Product Name**: AI-Powered Email Builder  
+ **Author**: Henrique Saboia  
+ **Date**: 04/18/2025  
+ **Version**: 1.1
+
+---
+
+### **Overview**
+
+This product will replace the manual process of converting Figma-based email designs into responsive HTML emails by leveraging AI. The goal is to reduce production time, eliminate manual errors, and enable scalability in email creation while adhering to brand and technical standards.
+
+---
+
+### **Problem Statement**
+
+The current email production process is manual, repetitive, and error-prone. Each new design requires a human to interpret the visual layout, match components from a Figma design to HTML code, insert proper interpolations and snippets, and validate the final output. The process lacks scalability and introduces potential for inconsistencies.
+
+---
+
+### **Objectives**
+
+* Automate the generation of production-ready, responsive HTML from Figma-based designs
+
+* Interpret visual and structural elements like a human email developer would
+
+* Minimize the number of unique templates by identifying dynamic interpolation conditions
+
+* Ensure consistency with branding, accessibility, and responsive standards
+
+* Offer human-friendly review and override interface with full transparency into AI decisions
+
+---
+
+### **Scope**
+
+#### **In Scope**
+
+* Frontend web interface for email developers
+
+* AI backend to transform design → HTML
+
+* Local snippet library ingestion (CSV)
+
+* Component matching and interpolation handling
+
+* Rendered preview of email
+
+* Change log for AI-generated decisions
+
+#### **Out of Scope (for v1)**
+
+* Visual WYSIWYG editing
+
+* Email testing suite integration
+
+* Real-time collaborative editing
+
+* Support for non-Figma design sources
+
+---
+
+### **Users**
+
+**Primary**: Email Developers / Operations Team  
+ **Secondary**: Creative Team (for verification)
+
+---
+
+### **Functional Requirements**
+
+#### **Web UI**
+
+* Inputs:
+
+  1. Figma Design ID
+
+  2. Node ID (to locate the relevant portion of the design)
+
+* Outputs:
+
+  1. Responsive HTML code (clean, production-ready)
+
+  2. Rendered preview of email in-browser
+
+  3. Detailed AI decision report, including:
+
+     * Component mappings
+
+     * Interpolation logic
+
+     * Snippets used
+
+     * Template reuse/combination logic
+
+#### **AI Backend**
+
+* Ingest Figma file via Design ID \+ Node ID
+
+* Detect and identify:
+
+  * Design components from Figma component library
+
+  * Variants driven by dynamic interpolations (e.g., employer logo, greeting)
+
+* Determine if multiple visual variants share a base structure and can be combined into one flexible HTML template using interpolation logic
+
+* Map to matching components from Iterable's HTML master library
+
+* Insert:
+
+  * Hardcoded content
+
+  * User-level interpolation (e.g. `{{first_name}}`)
+
+  * Client-level interpolation (e.g. `{{employer_logo}}`)
+
+  * Reusable snippets (from local CSV library)
+
+* Assemble and output production-ready responsive HTML
+
+* Generate a log of all decisions and justifications for human QA
+
+---
+
+### **AI Training Context**
+
+* The system will be trained using an initial dataset of **17 fully coded email examples**, including both the Figma design source and final Iterable HTML.
+
+* This dataset should be used to fine-tune component matching, snippet usage, and interpretation of design logic.
+
+* More examples can be added over time to improve AI accuracy.
+
+---
+
+### **Email Structure & Logic**
+
+Each email includes:
+
+* **Hardcoded text**
+
+* **User-level interpolations** (`{{first_name}}`)
+
+* **Client-level interpolations** (`{{employer_logo}}`)
+
+* **Snippets** (reusable blocks like footers, tracking pixels, compliance messages)
+
+AI must distinguish between purely visual variations and true structural variations. Multiple visual variants in Figma may share the same underlying HTML template if built with smart interpolation logic.
+
+---
+
+### **Integration Points**
+
+1. **Figma**
+
+   * Design source
+
+   * Component structure
+
+   * Styleguide
+
+   * Component order rules
+
+2. **Iterable**
+
+   * HTML master component library
+
+   * Template storage for final outputs
+
+3. **Local CSV (Snippet Library)**
+
+   * Source of truth for snippets
+
+   * Includes content such as footers, legal disclaimers, dynamic blocks
+
+   * Not available via API — must be read and managed locally
+
+---
+
+### **Success Metrics**
+
+* Reduce average production time per email by 80%
+
+* 95% success rate in component-to-HTML mapping accuracy
+
+* 90% reduction in unique templates required per campaign
+
+* 95% accuracy in interpolation detection
+
+* Adoption rate among email developers (target: 100%)
+
+---
+
+### **Existing Resources**
+
+* Figma Component Library – [https://www.figma.com/design/hj82PYYXyGJnpo3lF9BMLI/Growth-Marketing-Email-Template?node-id=541-1529\&p=f\&m=dev](https://www.figma.com/design/hj82PYYXyGJnpo3lF9BMLI/Growth-Marketing-Email-Template?node-id=541-1529&p=f&m=dev)
+
+* Styleguide – [https://www.figma.com/design/hj82PYYXyGJnpo3lF9BMLI/Growth-Marketing-Email-Template?node-id=3366-9812\&p=f\&m=dev](https://www.figma.com/design/hj82PYYXyGJnpo3lF9BMLI/Growth-Marketing-Email-Template?node-id=3366-9812&p=f&m=dev)
+
+* Component Order Guide – [https://www.figma.com/design/hj82PYYXyGJnpo3lF9BMLI/Growth-Marketing-Email-Template?node-id=5847-3000\&p=f\&m=dev](https://www.figma.com/design/hj82PYYXyGJnpo3lF9BMLI/Growth-Marketing-Email-Template?node-id=5847-3000&p=f&m=dev)
+
+* Iterable Master HTML Library – [https://app.iterable.com/templates/editor?templateId=14952092\&locale=en-US](https://app.iterable.com/templates/editor?templateId=14952092&locale=en-US)
+
+* Snippet Library (CSV) – /Users/henrique.saboia/Downloads/Iterable Snippets Library \- ID BASE\_SFDC\_2024 Master Template Snippets .csv
+
+* 17 Training Examples – /Users/henrique.saboia/Downloads/Figma-email-converted training data \- Sheet1.csv
+
+---
+
+### **Future Considerations**
+
+* Integration with QA tools (e.g. Litmus, Email on Acid)
+
+* Export to other ESPs beyond Iterable
+
+* User interface for dynamic snippet editing
+
+* AI feedback loop for learning from post-send metrics or QA corrections
+
+---
+
