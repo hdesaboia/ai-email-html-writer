@@ -62,11 +62,59 @@ npm start
 
 ## Testing
 
-The backend includes a comprehensive test suite using pytest. To run the tests:
+The backend includes a comprehensive test suite using pytest. The tests are organized into several categories:
 
+### Test Categories
+
+1. **Unit Tests**
+   - Email generator functionality (`test_email_generator.py`)
+   - Template rendering and validation
+   - Data processing and optimization
+   - HTML generation and validation
+
+2. **Integration Tests**
+   - Full email generation flow (`test_email_integration.py`)
+   - Database operations and storage
+   - Concurrent operations
+   - Error handling and edge cases
+
+3. **Performance Tests**
+   - Large template processing (`test_email_performance.py`)
+   - Bulk email generation
+   - Database query performance
+   - Memory usage monitoring
+
+4. **CRUD Tests**
+   - Email template management (`test_templates.py`)
+   - Generated email operations (`test_crud_generated_email.py`)
+   - User authentication (`test_auth.py`)
+
+### Running Tests
+
+1. **Run all tests**:
 ```bash
 cd backend
 pytest
+```
+
+2. **Run specific test categories**:
+```bash
+# Unit tests
+pytest tests/test_email_generator.py
+
+# Integration tests
+pytest tests/test_email_integration.py
+
+# Performance tests
+pytest tests/test_email_performance.py
+
+# CRUD tests
+pytest tests/test_crud_generated_email.py
+```
+
+3. **Run with coverage report**:
+```bash
+pytest --cov=app tests/
 ```
 
 ### Test Coverage
@@ -74,6 +122,9 @@ pytest
 - User management (CRUD operations)
 - Database operations
 - API endpoints
+- Email generation and optimization
+- Template management
+- Performance and scalability
 
 ## Authentication
 
