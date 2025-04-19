@@ -1,102 +1,85 @@
 # AI Email HTML Writer
 
-A full-stack application for generating HTML email templates using AI.
+An AI-powered tool that converts Figma designs into responsive HTML emails.
 
-## Project Structure
+## Features
 
-```
-.
-├── backend/           # FastAPI backend
-│   └── requirements.txt
-├── frontend/          # React frontend
-│   └── package.json
-└── docs/             # Project documentation
-```
+- Convert Figma designs to responsive HTML emails
+- AI-powered component matching and interpolation
+- Secure user authentication
+- Email preview and validation
+- Template management
 
-## Technology Stack
-
-### Frontend
-- React 18 with TypeScript
-- Material-UI for UI components
-- Redux Toolkit for state management
-- React Router for navigation
-- Socket.IO for real-time features
-- Axios for HTTP requests
+## Setup
 
 ### Backend
-- FastAPI for the web framework
-- SQLAlchemy for database ORM
-- PostgreSQL for the database
-- JWT for authentication
-- Alembic for database migrations
 
-## Development Setup
+1. Create and activate virtual environment:
+```bash
+python3.11 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
 
-### Prerequisites
-- Node.js (v16 or higher)
-- Python 3.8 or higher
-- PostgreSQL
-
-### Frontend Setup
-1. Navigate to the frontend directory:
-   ```bash
-   cd frontend
-   ```
 2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Start the development server:
-   ```bash
-   npm start
-   ```
+```bash
+cd backend
+pip install -r requirements.txt
+```
 
-### Backend Setup
-1. Navigate to the backend directory:
-   ```bash
-   cd backend
-   ```
-2. Create a virtual environment:
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
-3. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-4. Set up environment variables:
-   ```bash
-   cp .env.example .env
-   # Edit .env with your configuration
-   ```
-5. Start the development server:
-   ```bash
-   uvicorn main:app --reload
-   ```
+3. Set up environment variables:
+```bash
+cp .env.example .env
+# Edit .env with your configuration
+```
 
-## Dependencies
+4. Initialize database:
+```bash
+python init_db.py
+```
 
-### Frontend Dependencies
-- `@mui/material`: Material Design components
-- `@reduxjs/toolkit`: State management
-- `react-router-dom`: Routing
-- `socket.io-client`: Real-time communication
-- `axios`: HTTP client
+5. Run the backend:
+```bash
+uvicorn app.main:app --reload
+```
 
-### Backend Dependencies
-- `fastapi`: Web framework
-- `sqlalchemy`: Database ORM
-- `python-jose`: JWT implementation
-- `alembic`: Database migrations
-- `pytest`: Testing framework
+### Frontend
+
+1. Install dependencies:
+```bash
+cd frontend
+npm install
+```
+
+2. Start development server:
+```bash
+npm start
+```
+
+## Testing
+
+To run the tests:
+```bash
+cd backend
+pytest
+```
+
+## Authentication
+
+The application uses JWT-based authentication. Users need to:
+1. Register with email and password
+2. Login to get an access token
+3. Use the token in the Authorization header for protected endpoints
+
+## API Documentation
+
+Once the server is running, visit:
+- Swagger UI: http://localhost:8000/docs
+- ReDoc: http://localhost:8000/redoc
 
 ## Contributing
 
-1. Create a feature branch from `development`
-2. Make your changes
-3. Submit a pull request for review
-
-## License
-
-[Add your license information here] 
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request 
