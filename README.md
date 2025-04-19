@@ -10,6 +10,8 @@ An AI-powered tool that converts Figma designs into responsive HTML emails.
 - Email preview and validation
 - Template management
 - Comprehensive test suite
+- Figma API integration with caching and retry mechanisms
+- Robust error handling for Figma operations
 
 ## Setup
 
@@ -35,6 +37,8 @@ cp .env.example .env
 # - ALGORITHM: JWT algorithm (default: HS256)
 # - ACCESS_TOKEN_EXPIRE_MINUTES: Token expiration time
 # - DATABASE_URL: PostgreSQL connection string
+# - FIGMA_ACCESS_TOKEN: Your Figma API access token
+# - REDIS_URL: Redis connection string for caching (optional)
 ```
 
 4. Initialize database:
@@ -42,7 +46,12 @@ cp .env.example .env
 python init_db.py
 ```
 
-5. Run the backend:
+5. Run Redis (if using caching):
+```bash
+redis-server
+```
+
+6. Run the backend:
 ```bash
 uvicorn app.main:app --reload
 ```
@@ -71,12 +80,15 @@ The backend includes a comprehensive test suite using pytest. The tests are orga
    - Template rendering and validation
    - Data processing and optimization
    - HTML generation and validation
+   - Figma client functionality (`test_figma_client.py`)
 
 2. **Integration Tests**
    - Full email generation flow (`test_email_integration.py`)
    - Database operations and storage
    - Concurrent operations
    - Error handling and edge cases
+   - Figma API integration (`test_figma_integration.py`)
+   - Figma design to HTML conversion (`test_figma_design_integration.py`)
 
 3. **Performance Tests**
    - Large template processing (`test_email_performance.py`)
@@ -256,4 +268,63 @@ Authorization: Bearer <access_token>
 - [x] Email Template model and CRUD
 - [ ] Email generation service
 - [ ] Frontend authentication components
-- [ ] Frontend template management 
+- [ ] Frontend template management
+
+## Figma Integration
+
+The application integrates with the Figma API to convert design files into HTML emails:
+
+1. **Authentication**:
+   - Requires a Figma access token (set in .env)
+   - Token validation on startup
+   - Automatic token refresh handling
+
+2. **Design Access**:
+   - Fetch Figma file metadata
+   - Retrieve specific nodes and components
+   - Access to image assets and styles
+
+3. **Conversion Process**:
+   - Recursive node traversal
+   - Component mapping to HTML elements
+   - Style extraction and application
+   - Responsive layout generation
+
+4. **Error Handling**:
+   - Validation of API responses
+   - Retry mechanism for transient failures
+   - Detailed error logging
+   - Custom exceptions for specific scenarios
+
+5. **Performance Optimization**:
+   - Redis-based caching for API responses
+   - Batch processing of node requests
+   - Efficient image asset handling
+
+### Figma-Related Endpoints
+
+#### Convert Figma Design
+```http
+POST /api/v1/templates/from-figma
+Authorization: Bearer <access_token>
+Content-Type: application/json
+
+{
+    "figma_file_key": "abc123",
+    "figma_node_id": "1:2",
+    "name": "Email Template from Figma",
+    "description": "Converted from Figma design"
+}
+```
+
+#### Validate Figma Access
+```http
+GET /api/v1/templates/validate-figma
+Authorization: Bearer <access_token>
+```
+
+#### Get Figma File Preview
+```http
+GET /api/v1/templates/figma-preview/{file_key}
+Authorization: Bearer <access_token>
+``` 

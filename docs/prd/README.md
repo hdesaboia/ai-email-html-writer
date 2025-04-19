@@ -8,14 +8,16 @@ This document outlines the requirements, specifications, and implementation plan
 2. [User Stories](user_stories.md)
 3. [Technical Specifications](technical_spec.md)
 4. [Project Milestones](milestones.md)
+5. [Figma Integration](figma_integration.md)
 
 ## Document Status
-- **Version**: 1.1
-- **Last Updated**: 04/18/2025
+- **Version**: 1.2
+- **Last Updated**: 04/19/2025
 - **Status**: Draft
 - **Author**: Henrique Saboia
 
 ## Change Log
 | Version | Date | Changes | Author |
 |---------|------|---------|--------|
+| 1.2 | 04/19/2025 | Added Figma integration documentation | Henrique Saboia |
 | 1.1 | 04/18/2025 | Initial draft with complete requirements | Henrique Saboia | 
