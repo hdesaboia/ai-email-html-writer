@@ -4,16 +4,20 @@ from pydantic import AnyHttpUrl, BaseSettings, PostgresDsn, validator
 
 
 class Settings(BaseSettings):
-    API_V1_STR: str = "/api/v1"
     PROJECT_NAME: str = "AI Email HTML Writer"
-    
-    # Security
-    SECRET_KEY: str
+    API_V1_STR: str = "/api/v1"
+    SECRET_KEY: str = "your-secret-key-here"  # Change this in production
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = []
 
-    # Database
-    DATABASE_URL: PostgresDsn
+    @validator("BACKEND_CORS_ORIGINS", pre=True)
+    def assemble_cors_origins(cls, v: Union[str, List[str]]) -> Union[List[str], str]:
+        if isinstance(v, str) and not v.startswith("["):
+            return [i.strip() for i in v.split(",")]
+        elif isinstance(v, (list, str)):
+            return v
+        raise ValueError(v)
 
     class Config:
         case_sensitive = True
