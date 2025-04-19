@@ -1,20 +1,25 @@
-from typing import Any, List
+from typing import Any, List, Dict
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
-from app import crud, models, schemas
+from app import crud
+from app.models import User
+from app.schemas.email_template import EmailTemplate, EmailTemplateCreate, EmailTemplateUpdate
+from app.schemas.generated_email import GeneratedEmail, GeneratedEmailCreate
 from app.api import deps
+from app.services.email_generator import EmailGenerator
 
 router = APIRouter()
+email_generator = EmailGenerator()
 
 
-@router.get("/", response_model=List[schemas.EmailTemplate])
+@router.get("/", response_model=List[EmailTemplate])
 def read_templates(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
     limit: int = 100,
-    current_user: models.User = Depends(deps.get_current_active_user),
+    current_user: User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
     Retrieve templates.
@@ -25,12 +30,12 @@ def read_templates(
     return templates
 
 
-@router.post("/", response_model=schemas.EmailTemplate)
+@router.post("/", response_model=EmailTemplate)
 def create_template(
     *,
     db: Session = Depends(deps.get_db),
-    template_in: schemas.EmailTemplateCreate,
-    current_user: models.User = Depends(deps.get_current_active_user),
+    template_in: EmailTemplateCreate,
+    current_user: User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
     Create new template.
@@ -41,13 +46,13 @@ def create_template(
     return template
 
 
-@router.put("/{template_id}", response_model=schemas.EmailTemplate)
+@router.put("/{template_id}", response_model=EmailTemplate)
 def update_template(
     *,
     db: Session = Depends(deps.get_db),
     template_id: int,
-    template_in: schemas.EmailTemplateUpdate,
-    current_user: models.User = Depends(deps.get_current_active_user),
+    template_in: EmailTemplateUpdate,
+    current_user: User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
     Update a template.
@@ -61,12 +66,12 @@ def update_template(
     return template
 
 
-@router.get("/{template_id}", response_model=schemas.EmailTemplate)
+@router.get("/{template_id}", response_model=EmailTemplate)
 def read_template(
     *,
     db: Session = Depends(deps.get_db),
     template_id: int,
-    current_user: models.User = Depends(deps.get_current_active_user),
+    current_user: User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
     Get template by ID.
@@ -79,12 +84,12 @@ def read_template(
     return template
 
 
-@router.delete("/{template_id}", response_model=schemas.EmailTemplate)
+@router.delete("/{template_id}", response_model=EmailTemplate)
 def delete_template(
     *,
     db: Session = Depends(deps.get_db),
     template_id: int,
-    current_user: models.User = Depends(deps.get_current_active_user),
+    current_user: User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
     Delete a template.
@@ -98,7 +103,7 @@ def delete_template(
     return template
 
 
-@router.get("/public/", response_model=List[schemas.EmailTemplate])
+@router.get("/public/", response_model=List[EmailTemplate])
 def read_public_templates(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
@@ -111,13 +116,13 @@ def read_public_templates(
     return templates
 
 
-@router.get("/figma/{file_key}", response_model=schemas.EmailTemplate)
+@router.get("/figma/{file_key}", response_model=EmailTemplate)
 def read_template_by_figma(
     *,
     db: Session = Depends(deps.get_db),
     file_key: str,
     node_id: str = None,
-    current_user: models.User = Depends(deps.get_current_active_user),
+    current_user: User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
     Get template by Figma file key and optionally node ID.
@@ -129,4 +134,59 @@ def read_template_by_figma(
         raise HTTPException(status_code=404, detail="Template not found")
     if not template.is_public and template.owner_id != current_user.id:
         raise HTTPException(status_code=400, detail="Not enough permissions")
-    return template 
+    return template
+
+
+@router.post("/{template_id}/generate", response_model=GeneratedEmail)
+def generate_email(
+    *,
+    db: Session = Depends(deps.get_db),
+    template_id: int,
+    data: Dict[str, Any],
+    preview: bool = False,
+    current_user: User = Depends(deps.get_current_active_user),
+) -> Any:
+    """
+    Generate an email from a template.
+    
+    Args:
+        template_id: ID of the template to use
+        data: Dictionary of data to inject into the template
+        preview: Whether to generate a preview version
+        current_user: The authenticated user
+        
+    Returns:
+        The generated email content
+    """
+    # Get the template
+    template = crud.email_template.get(db=db, id=template_id)
+    if not template:
+        raise HTTPException(status_code=404, detail="Template not found")
+    if not template.is_public and template.owner_id != current_user.id:
+        raise HTTPException(status_code=400, detail="Not enough permissions")
+    
+    try:
+        # Generate the email
+        html_content = email_generator.generate_email(
+            template=template,
+            data=data,
+            preview=preview
+        )
+        
+        # Create the generated email record
+        generated_email = crud.generated_email.create_with_template(
+            db=db,
+            obj_in=GeneratedEmailCreate(
+                html_content=html_content,
+                template_id=template_id,
+                data=data
+            ),
+            owner_id=current_user.id
+        )
+        
+        return generated_email
+        
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Error generating email") 

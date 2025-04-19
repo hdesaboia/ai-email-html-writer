@@ -1,23 +1,22 @@
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from dotenv import load_dotenv
 import os
 
-from app import create_app
-
 # Load environment variables
 load_dotenv()
 
 # Initialize FastAPI app
-app = create_app()
+app = FastAPI()
 
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=eval(os.getenv("BACKEND_CORS_ORIGINS", "[]")),
+    allow_origins=["*"],  # Allows all origins
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
 )
 
 @app.get("/")
@@ -29,6 +28,10 @@ async def root():
             "status": "operational"
         }
     )
+
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy"}
 
 if __name__ == "__main__":
     import uvicorn

@@ -9,6 +9,7 @@ class EmailTemplate(Base):
     """Email template model for storing HTML email templates.
     
     Attributes:
+        id: Primary key
         name: Name of the template
         description: Optional description of the template
         html_content: The actual HTML content of the template
@@ -22,10 +23,11 @@ class EmailTemplate(Base):
     """
     __tablename__ = "email_templates"
 
+    id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True, nullable=False)
     description = Column(Text)
     html_content = Column(Text, nullable=False)
-    owner_id = Column(Integer, ForeignKey("user.id"), nullable=False)
+    owner_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     is_public = Column(Boolean, default=False)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
