@@ -71,72 +71,42 @@ npm start
 
 ## Testing
 
-The backend includes a comprehensive test suite using pytest. The tests are organized into several categories:
+The project includes both unit tests and integration tests to ensure functionality.
 
-### Test Categories
+### Unit Tests
+Unit tests run with mock data and don't require real API credentials:
 
-1. **Unit Tests**
-   - Email generator functionality (`test_email_generator.py`)
-   - Template rendering and validation
-   - Data processing and optimization
-   - HTML generation and validation
-   - Figma client functionality (`test_figma_client.py`)
-
-2. **Integration Tests**
-   - Full email generation flow (`test_email_integration.py`)
-   - Database operations and storage
-   - Concurrent operations
-   - Error handling and edge cases
-   - Figma API integration (`test_figma_integration.py`)
-   - Figma design to HTML conversion (`test_figma_design_integration.py`)
-
-3. **Performance Tests**
-   - Large template processing (`test_email_performance.py`)
-   - Bulk email generation
-   - Database query performance
-   - Memory usage monitoring
-
-4. **CRUD Tests**
-   - Email template management (`test_templates.py`)
-   - Generated email operations (`test_crud_generated_email.py`)
-   - User authentication (`test_auth.py`)
-
-### Running Tests
-
-1. **Run all tests**:
 ```bash
-cd backend
-pytest
+python -m pytest backend/tests/unit/
 ```
 
-2. **Run specific test categories**:
-```bash
-# Unit tests
-pytest tests/test_email_generator.py
+### Integration Tests
+Integration tests verify the Figma integration with real API calls:
 
-# Integration tests
-pytest tests/test_email_integration.py
+1. Setup:
+   ```bash
+   cp backend/tests/integration.env.example backend/tests/integration.env
+   ```
 
-# Performance tests
-pytest tests/test_email_performance.py
+2. Configure:
+   Edit `backend/tests/integration.env` with your Figma credentials:
+   ```
+   FIGMA_ACCESS_TOKEN=your_token_here
+   FIGMA_FILE_KEY=your_test_file_key
+   ```
 
-# CRUD tests
-pytest tests/test_crud_generated_email.py
-```
+3. Run:
+   ```bash
+   python -m pytest backend/tests/integration/
+   ```
 
-3. **Run with coverage report**:
-```bash
-pytest --cov=app tests/
-```
+Note: Integration tests are skipped if Figma credentials are not provided.
 
 ### Test Coverage
-- User authentication (registration, login, token validation)
-- User management (CRUD operations)
-- Database operations
-- API endpoints
-- Email generation and optimization
-- Template management
-- Performance and scalability
+Generate a coverage report:
+```bash
+python -m pytest --cov=backend/app backend/tests/
+```
 
 ## Authentication
 
@@ -259,16 +229,60 @@ Authorization: Bearer <access_token>
 
 ## Development Status
 
-### Phase 1: Core Infrastructure (In Progress)
+### Phase 1: Core Infrastructure ✅
 - [x] Backend setup with FastAPI
 - [x] Database configuration with SQLAlchemy
 - [x] User authentication system
 - [x] Basic CRUD operations
 - [x] Test infrastructure
 - [x] Email Template model and CRUD
-- [ ] Email generation service
-- [ ] Frontend authentication components
-- [ ] Frontend template management
+- [x] Email generation service
+- [x] Frontend authentication components
+- [x] Frontend template management
+
+### Phase 2: Email-Safe Responsive Design ✅
+- [x] Table-based email layout system
+- [x] Cross-client compatibility
+- [x] Responsive image handling
+- [x] Web-safe fonts and colors
+- [x] Media queries for mobile devices
+- [x] Email-specific CSS handling
+- [x] Button and form element support
+- [x] Comprehensive test coverage
+
+### Phase 3: AI Integration 🚀
+- [ ] OpenAI API integration
+- [ ] Component recognition system
+- [ ] Style analysis and matching
+- [ ] Content generation
+- [ ] Layout optimization
+- [ ] A/B testing support
+- [ ] Performance monitoring
+- [ ] User feedback integration
+
+## AI Features
+
+The application uses AI to enhance the email generation process:
+
+1. **Component Recognition**:
+   - Analyzes Figma components to identify their purpose
+   - Maps components to email-safe HTML patterns
+   - Learns from user corrections and feedback
+
+2. **Style Analysis**:
+   - Extracts design patterns from Figma files
+   - Converts complex styles to email-compatible formats
+   - Maintains design fidelity across email clients
+
+3. **Content Generation**:
+   - Suggests email copy based on design context
+   - Generates responsive variations
+   - Optimizes for engagement
+
+4. **Layout Optimization**:
+   - Analyzes design hierarchy
+   - Suggests mobile-friendly layouts
+   - Ensures accessibility compliance
 
 ## Figma Integration
 
