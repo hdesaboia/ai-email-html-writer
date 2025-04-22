@@ -12,6 +12,96 @@ An AI-powered tool that converts Figma designs into responsive HTML emails.
 - Comprehensive test suite
 - Figma API integration with caching and retry mechanisms
 - Robust error handling for Figma operations
+- Style Guide Integration:
+  - Typography system with desktop and mobile specifications
+  - Color system with background and text colors
+  - Image guidelines for static and animated content
+  - Spacing and padding system
+  - Device layout specifications
+
+## Style Guide
+
+The application implements a comprehensive style guide for email design:
+
+### Typography
+- Desktop and mobile specifications for:
+  - Headlines (H1, H2, H3)
+  - Body text
+  - Special text (Eyebrow, Caption, Testimonial, CTA, Legal, Hyperlink)
+  - Numbers and form elements
+
+### Colors
+- Background Colors:
+  - White (#FFFFFF)
+  - Evergreen (#007B34)
+  - Oat (#FFFBED)
+  - Light grey (#EDEDED)
+  - Lime 30% (#EDEDED)
+- Text Colors:
+  - Dark grey (#373938)
+  - Mid grey (#848484)
+  - White (#FFFFFF)
+  - Evergreen (#007B34)
+
+### Images
+- Static Images:
+  - Single image approach for desktop and mobile
+  - Larger size images for optimal quality
+  - Responsive handling
+  - Accessibility requirements
+- Animated GIFs:
+  - File size limits (ideal: <250KB, max: <1MB)
+  - Static fallback requirements
+  - Accessibility guidelines
+
+### Spacing
+- Desktop and mobile padding components
+- Section separation guidelines
+- Component spacing rules
+- Built-in padding components
+
+### Device Layouts
+- Desktop:
+  - Width: 600px
+  - Preferred single-column layout
+  - Supported two-column option
+- Mobile:
+  - Width: 320px (minimum), 420px (standard)
+  - Required single-column layout
+  - Responsive design guidelines
+
+## AI Training
+
+The application uses AI to match Figma designs with email components:
+
+### Training Data Sources
+1. Figma Design System
+   - Typography components
+   - Color system
+   - Layout components
+   - Image guidelines
+2. Email Templates
+   - Existing email examples
+   - Component library
+
+### Training Process
+1. Data Collection
+   - Extract typography data
+   - Extract color system data
+   - Extract layout components
+   - Collect email template examples
+
+2. Data Processing
+   - Convert Figma styles to email-safe CSS
+   - Create component templates
+   - Document responsive patterns
+   - Validate against email clients
+
+3. Training Data Preparation
+   - Structure data in JSON format
+   - Create training examples
+   - Add validation rules
+   - Document edge cases
 
 ## Setup
 
